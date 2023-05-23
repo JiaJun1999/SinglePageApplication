@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dog Breeds App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+  
+    h1 {
+      margin-bottom: 20px;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+  
+    li {
+      cursor: pointer;
+      padding: 10px;
+      background-color: #f0f0f0;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+  
+    li:hover {
+      background-color: #e0e0e0;
+    }
+  
+    .breed-details {
+      margin-top: 20px;
+    }
+  
+    .breed-details h2 {
+      margin-bottom: 10px;
+    }
+  
+    .breed-details img {
+      max-width: 100%;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <h1>Dog Breeds</h1>
+    <ul>
+      <li v-for="breed in breeds" :key="breed.id" @click="selectBreed(breed)">{{ breed.name }}</li>
+    </ul>
+
+    <div class="breed-details" v-if="selectedBreed">
+      <h2>{{ selectedBreed.name }}</h2>
+      <p>{{ selectedBreed.description }}</p>
+      <img :src="selectedBreed.image.url" :alt="selectedBreed.name" />
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        breeds: [],
+        selectedBreed: null
+      },
+      mounted() {
+        // Fetch dog breeds data
+        fetch('https://api.thedogapi.com/v1/breeds')
+          .then(response => response.json())
+          .then(data => {
+            this.breeds = data;
+          })
+          .catch(error => {
+            console.error('Error fetching dog breeds:', error);
+          });
+      },
+      methods: {
+        selectBreed(breed) {
+          this.selectedBreed = breed;
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
